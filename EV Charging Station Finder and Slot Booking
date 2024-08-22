@@ -1,0 +1,52 @@
+# Sample data for charging stations
+charging_stations = [
+    {"id": 1, "location": "Downtown", "connector_type": "Type 2", "available_slots": 3},
+    {"id": 2, "location": "Uptown", "connector_type": "CCS", "available_slots": 1},
+    {"id": 3, "location": "Suburb", "connector_type": "Type 1", "available_slots": 2},
+]
+
+def view_charging_stations(location_filter=None, connector_filter=None):
+    print("Available Charging Stations:")
+    for station in charging_stations:
+        if (location_filter is None or station["location"] == location_filter) and \
+           (connector_filter is None or station["connector_type"] == connector_filter):
+            print(f"ID: {station['id']}, Location: {station['location']}, Connector: {station['connector_type']}, Slots: {station['available_slots']}")
+
+def book_slot(station_id):
+    for station in charging_stations:
+        if station["id"] == station_id:
+            if station["available_slots"] > 0:
+                station["available_slots"] -= 1
+                print(f"Booking successful at Station ID {station_id}. Remaining slots: {station['available_slots']}")
+                return
+            else:
+                print("No available slots at this station.")
+                return
+    print("Invalid Station ID.")
+
+def main():
+    while True:
+        print("\n1. View Charging Stations")
+        print("2. Book a Slot")
+        print("3. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            location = input("Enter location filter (or press Enter to skip): ")
+            connector = input("Enter connector type filter (or press Enter to skip): ")
+            view_charging_stations(location_filter=location if location else None,
+                                   connector_filter=connector if connector else None)
+
+        elif choice == '2':
+            station_id = int(input("Enter the Station ID to book: "))
+            book_slot(station_id)
+
+        elif choice == '3':
+            print("Exiting...")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
